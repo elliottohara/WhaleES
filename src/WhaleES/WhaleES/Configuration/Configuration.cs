@@ -86,7 +86,7 @@ namespace WhaleES.Configuration
                                                                                   pi.ParameterType == @event.GetType())
                                                                                   );
                                                 if (applyMethod == null) return;
-                                                applyMethod.Invoke(ar, new[]{@event});
+                                                applyMethod.Invoke(ar, new[]{@event,true});
                                             });
         }
     }

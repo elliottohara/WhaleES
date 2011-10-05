@@ -27,6 +27,7 @@ namespace WhaleES.Integration.Test
             _repository.Get("blah");
 
             Assert.IsTrue(StandardAr.EventWasHandled);
+            Assert.IsTrue(StandardAr.WasInReplay.Value);
         }
         [Test]
         public void will_save_events()
@@ -42,14 +43,15 @@ namespace WhaleES.Integration.Test
     public class StandardAr
     {
         public static bool EventWasHandled = false;
-
+        public static bool? WasInReplay = null;
         public StandardAr()
         {
             UncommittedEvents = new List<object>();
         }
-        public void Apply(StandardEvent @event)
+        public void Apply(StandardEvent @event,bool isReplaying = false)
         {
             EventWasHandled = true;
+            WasInReplay = isReplaying;
         }
 
         public List<object> UncommittedEvents { get; private set; }
