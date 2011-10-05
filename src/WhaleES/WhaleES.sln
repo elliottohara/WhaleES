@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhaleES", "WhaleES\WhaleES.csproj", "{E9B3972B-21C9-4044-9E92-DE8CA18925DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhaleES.Integration.Test", "WhaleES.Integration.Test\WhaleES.Integration.Test.csproj", "{D2030158-C2BF-417D-BF6A-D02DC0B8AC48}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9B3972B-21C9-4044-9E92-DE8CA18925DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9B3972B-21C9-4044-9E92-DE8CA18925DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9B3972B-21C9-4044-9E92-DE8CA18925DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9B3972B-21C9-4044-9E92-DE8CA18925DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2030158-C2BF-417D-BF6A-D02DC0B8AC48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2030158-C2BF-417D-BF6A-D02DC0B8AC48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2030158-C2BF-417D-BF6A-D02DC0B8AC48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2030158-C2BF-417D-BF6A-D02DC0B8AC48}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
