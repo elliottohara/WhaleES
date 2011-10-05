@@ -74,5 +74,22 @@ namespace WhaleEs.AccountingExample.Tests
             _repository.Put(accountFromRepo.Id, accountFromRepo);
             
         }
+        [Test]
+        public void make_a_rich_dude()
+        {
+            //var account =
+            //    new Account(new AccountOpened {AccountId = "richdude", InitialDeposit = 10000, On = DateTime.Now});
+            //for(var i = 1; i < 10000; i++)
+            //{
+            //    account.Deposit(10000);
+            //}
+            //_repository.Put(account.Id,account);
+
+            var dudeFromRepo = _repository.Get("richdude");
+            var originalBalance = dudeFromRepo._balance;
+            _repository.Put("richdude", dudeFromRepo);
+            var again = _repository.Get(dudeFromRepo.Id);
+            Assert.AreEqual(originalBalance,again._balance);
+        }
     }
 }

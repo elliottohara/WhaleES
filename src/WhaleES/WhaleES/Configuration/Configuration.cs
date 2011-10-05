@@ -64,7 +64,7 @@ namespace WhaleES.Configuration
             return this;
         }
       /// <summary>
-      /// Type is AR type, first param is the event, second is the event
+      /// first param is the event, second is the event
       /// </summary>
       /// <param name="applyAction"></param>
       /// <returns></returns>
