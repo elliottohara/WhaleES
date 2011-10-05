@@ -14,20 +14,17 @@ namespace WhaleES
     /// <typeparam name="T">Aggregate Root type, should have Apply(SomeEventType @event) methods for the associated events.</typeparam>
     public class Repository<T> where T: new()
     {
-        private readonly StreamOfEventsFor<T> _streamOfEventsFor;
+        private readonly IStreamOfEventsFor<T> _streamOfEventsFor;
 
-        internal Repository(StreamOfEventsFor<T> streamOfEventsFor)
+        internal Repository(IStreamOfEventsFor<T> streamOfEventsFor)
         {
             _streamOfEventsFor = streamOfEventsFor;
         }
         public void Put(string id,object aggrigate)
         {
-            var eventsGetterName = ConfigureWhaleEs.CurrentConfig.UncommittedEventsMethodName;
-            var eventGetter = typeof (T).GetProperties().FirstOrDefault(p => p.Name == eventsGetterName);
-            if(eventGetter == null)
-                throw new ConfigurationErrorsException("Can not find method " + eventsGetterName + " on type" + typeof(T));
-            var events = eventGetter.GetValue(aggrigate, null) as List<Object> ?? new List<object>();
-            _streamOfEventsFor.Persist(id,events.ToArray());
+            var events = ConfigureWhaleEs.CurrentConfig.GetUncommitedEventsMethod(aggrigate);
+            if(events != null)
+                _streamOfEventsFor.Persist(id,events.ToArray());
 
         }
         /// <summary>
@@ -43,12 +40,7 @@ namespace WhaleES
 
             foreach (var @event in stream)
             {
-                var eventType = @event.GetType();
-                var applyMethod = ar.GetType().GetMethods()
-                    .FirstOrDefault(
-                        mi => mi.Name == "Apply" && mi.GetParameters().Any(pi => pi.ParameterType == eventType));
-                if (applyMethod != null)
-                    applyMethod.Invoke(ar, new[] { @event ,true});
+                ConfigureWhaleEs.CurrentConfig.ApplyMethod(@event,ar);
             }
             return ar;
         }

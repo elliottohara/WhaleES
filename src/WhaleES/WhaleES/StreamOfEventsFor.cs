@@ -8,7 +8,14 @@ using Amazon.S3.Model;
 
 namespace WhaleES
 {
-    public class StreamOfEventsFor<T> : IDisposable
+    public interface IStreamOfEventsFor<T> where T:new()
+    {
+        void Persist(string id, params object[] events);
+        void Persist(string id,object @event);
+        IEnumerable<object> GetEventStream(string id);
+    }
+
+    public class StreamOfEventsFor<T> : IDisposable, IStreamOfEventsFor<T> where T:new()
     {
         private readonly AmazonS3 _s3Client;
         private readonly string _bucket;

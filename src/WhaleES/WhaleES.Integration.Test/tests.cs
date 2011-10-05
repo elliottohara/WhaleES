@@ -31,7 +31,7 @@ namespace WhaleES.Integration.Test
             _key = dictionary["UserName"];
             _secret = dictionary["Password"];
             client = Amazon.AWSClientFactory.CreateAmazonS3Client(_key,_secret);
-            _id = "test";
+            _id = "some_changes_for_config";
         }
         [Test]
         public void store_some_events()
