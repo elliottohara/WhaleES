@@ -31,7 +31,8 @@ namespace WhaleEs.AccountingExample.Tests
             _secret = dictionary["Password"];
             
             ConfigureWhaleEs
-                .With().WithBucket("WhaleES_tests")
+                .With()
+                .WithBucket("WhaleES_tests")
                 .WithProtocolBufferSerialization()
                 .WithSecret(_secret)
                 .WithKey(_key);
@@ -42,24 +43,27 @@ namespace WhaleEs.AccountingExample.Tests
         [Test] 
         public void create_account()
         {
-            var accountOpenedEvent = new AccountOpened {AccountId = "testing", InitialDeposit = 100, On = DateTime.Now};
+            var accountOpenedEvent = new AccountOpened {AccountId = "lklhohiohoi", InitialDeposit = 100, On = DateTime.Now};
             var account = new Account(accountOpenedEvent);
             _repository.Put(accountOpenedEvent.AccountId,account);
         }
         [Test]
         public void get_account()
         {
-            var account = _repository.Get("boomboompow");
+            var account = _repository.Get("ihohihoihoihoihoihoijpoawehiohoi");
+            
+            //_repository.Put(account.Id, account);
             Console.WriteLine(account._balance);
             foreach (var activity in account.Activity)
             {
                 Console.WriteLine(activity);
             }
+            Console.WriteLine(account._balance);
         }
         [Test]
         public void lets_do_some_stuff()
         {
-            var id = "boomboompow";
+            var id = "ihohihoihoihoihoihoijpoawehiohoi";
             var someNewAccountEvent = new AccountOpened
                                           {AccountId = id, InitialDeposit = 1000, On = DateTime.Now};
             var account = new Account(someNewAccountEvent);

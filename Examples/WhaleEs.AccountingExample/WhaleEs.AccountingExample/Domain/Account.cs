@@ -54,7 +54,7 @@ namespace WhaleEs.AccountingExample.Domain
         }
         public void Apply(AccountOverdrawn @event, bool isReplaying = false)
         {
-            _balance -= OVER_LIMIT_FEE;
+            //_balance -= OVER_LIMIT_FEE;
             Activity.Add("OVERDRAWN on " + @event.On + " $" + @event.Amount);
             if (!isReplaying) UncommittedEvents.Add(@event);
         }

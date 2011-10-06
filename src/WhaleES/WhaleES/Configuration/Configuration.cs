@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using Amazon.S3;
@@ -55,7 +56,17 @@ namespace WhaleES.Configuration
         }
         public Configuration UncommitedEventsGetMethodNameIs(string methodName)
         {
-            return UseFuncToGetUncommitedEvents(ar => ar.GetType().GetProperties().FirstOrDefault(pi => pi.Name == methodName).GetGetMethod().Invoke(ar,null) as IEnumerable<object>);
+            return UseFuncToGetUncommitedEvents(ar =>
+                                                    {
+                                                        var property = ar.GetType()
+                                                            .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                                                            .FirstOrDefault(pi => pi.Name == methodName);
+                                                        if(property == null)    
+                                                            throw new ConfigurationErrorsException("can not find Property with name " + methodName + "for record operation. Please check that your AggrigateRoot contains an IEnumerable<object> property with that name, or Configure WhaleES with the proper property name by calling UncommitedEventsGetMethodNameIs on ConfigureWhaleEs.With()");
+                                                        var getter = property.GetGetMethod()??property.GetGetMethod(true);
+
+                                                        return getter.Invoke(ar, null) as IEnumerable<object>;
+                                                    });
             
         }
         public Configuration UseFuncToGetUncommitedEvents(Func<object,IEnumerable<object>> uncommittedEventsMethodGetter)
@@ -78,7 +89,7 @@ namespace WhaleES.Configuration
 
             return UseActionToCallApply((@event, ar) =>
                                             {
-                                                var applyMethod = ar.GetType().GetMethods()
+                                                var applyMethod = ar.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
                                                     .FirstOrDefault(mi => mi.Name == "Apply" &&
                                                                           mi.GetParameters()
                                                                               .Any(
