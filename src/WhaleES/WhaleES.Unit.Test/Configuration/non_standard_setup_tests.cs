@@ -18,10 +18,11 @@ namespace WhaleES.Integration.Test
         [SetUp] 
         public void Arrange()
         {
-            ConfigureWhaleEs.With().UseActionToCallApply(
+            ConfigureWhaleEs.With().UseReflection().UseActionToCallApply(
                 (o,ar) =>
                 ar.GetType().GetMethods().FirstOrDefault(
                     mi => mi.Name == "DoThingWithEvent" && mi.GetParameters().Any(pi => pi.ParameterType == o.GetType())).Invoke(ar,new[]{o}))
+                    .UseReflection()
                 .UseFuncToGetUncommitedEvents(ar => ar.GetType().GetMethods().FirstOrDefault(mi => mi.Name == "EventsToSendToDb").Invoke(ar,null) as object[]);
 
             _eventStream = MockRepository.GenerateMock<IStreamOfEventsFor<AWierdAr>>();

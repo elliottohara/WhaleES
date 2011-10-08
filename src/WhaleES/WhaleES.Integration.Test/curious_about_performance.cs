@@ -64,10 +64,12 @@ namespace WhaleES.Integration.Test
         public void use_repo()
         {
             ConfigureWhaleEs.With()
-                .WithBucket("WhaleES_tests")
-                .WithKey(_key)
-                .WithSecret(_secret)
-                .WithProtocolBufferSerialization();
+                .ForAmazon()
+                .KeyIs(_key)
+                .SecretIs(_secret)
+                .UseS3BucketName("WhaleES_tests")
+                .ToSerialize()
+                .UseProtocolBuffers();
 
             var repo = RepositoryFactory.CreateRepositoryFor<Account>();
             var ar = repo.Get(_id);

@@ -65,9 +65,9 @@ namespace WhaleES.Integration.Test
         public static void Configure()
         {
             ConfigureWhaleEs.With()
-                .UseActionToCallApply((@event, ar) => ar
-                    .GetType().GetMethods()
-                    .First(mi => mi.Name == "DoStuffWith").Invoke(ar, new[] { @event, true }))
+                .UseExampleAggrigateRoot<NonStandardArWithPublicMethods>()
+                .ApplyMethodIs<StandardEvent>((ar,@event)=>ar.DoStuffWith(@event,true))
+                .And().UseReflection()
                 .UseFuncToGetUncommitedEvents(
                     ar => ar.GetType().GetMethod("EventsThatNeedToBeStored").Invoke(ar, null) as object[]);
         }
@@ -85,8 +85,9 @@ namespace WhaleES.Integration.Test
         public static void Configure()
         {
             ConfigureWhaleEs.With()
-                .CallMethodToStartReplay("StartReplay")
-                .CallMethodToEndReplay("StopReplay");
+                .UseExampleAggrigateRoot<ElliottsSuperDuperRecordingAR>()
+                .StartReplayBy(ar => ar.StartReplay())
+                .StopReplayBy(ar => ar.StopReplay());
 
         }
         private bool _isReplaying;
@@ -105,7 +106,8 @@ namespace WhaleES.Integration.Test
             calledEnd = true;
         }
         internal IEnumerable<object> UncommittedEvents { get { return TheUnCommittedEvents; } }
-        private void Apply(StandardEvent @event)
+
+        public void Apply(StandardEvent @event)
         {
             AddEvent(@event);
         }

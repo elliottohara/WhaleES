@@ -46,8 +46,12 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\AmazonConfiguration.cs" />
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\ConfigureWhaleES.cs" />
+    <Compile Include="Configuration\ExampleArConfigurationBuilder.cs" />
+    <Compile Include="Configuration\ReflectionAggrigateRootConfiguration.cs" />
+    <Compile Include="Configuration\SerilizationConfiguration.cs" />
     <Compile Include="Denormalizers\Denormalizer.cs" />
     <Compile Include="EventEnvelope.cs" />
     <Compile Include="ISerializer.cs" />
