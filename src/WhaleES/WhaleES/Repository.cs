@@ -12,7 +12,7 @@ namespace WhaleES
     /// Use <see cref="RepositoryFactory"/> to create an instance.
     /// </summary>
     /// <typeparam name="T">Aggregate Root type, should have Apply(SomeEventType @event) methods for the associated events.</typeparam>
-    public class Repository<T> where T: new()
+    public class Repository<T> where T: class,new()
     {
         private readonly IStreamOfEventsFor<T> _streamOfEventsFor;
 
@@ -23,8 +23,10 @@ namespace WhaleES
         public void Put(string id,object aggrigate)
         {
             var events = ConfigureWhaleEs.CurrentConfig.GetUncommitedEventsMethod(aggrigate);
-            if(events != null)
-                _streamOfEventsFor.Persist(id,events.ToArray());
+            if (events == null) return;
+            var eventsToPersist = events.ToArray();
+            _streamOfEventsFor.Persist(id, eventsToPersist);
+            ConfigureWhaleEs.CurrentConfig.PublishEvents(eventsToPersist);
 
         }
         /// <summary>
@@ -35,13 +37,15 @@ namespace WhaleES
         public T Get(string id)
         {
             var stream = _streamOfEventsFor.GetEventStream(id);
-            //TODO support IOC
+            if (stream == null || stream.Count() == 0)
+                return null;
             var ar = Activator.CreateInstance<T>();
-
+            ConfigureWhaleEs.CurrentConfig.StartReplay(ar);
             foreach (var @event in stream)
             {
                 ConfigureWhaleEs.CurrentConfig.ApplyMethod(@event,ar);
             }
+            ConfigureWhaleEs.CurrentConfig.EndReplay(ar);
             return ar;
         }
     }

@@ -14,14 +14,21 @@ namespace WhaleES.Configuration
         {
             UncommitedEventsGetMethodNameIs("UncommittedEvents");
             ApplyMethodNameIs("Apply");
+            StartReplay = a => { };
+            EndReplay = a => { };
+            PublishEvents = events => { };
         }
         private AmazonS3 _client;
+        private bool _hasReplaySwith;
         public ISerializer Serializer { get; private set; }
         public string BucketName { get; private set; }
         public string Key { get; private set; }
         public string Secret { get; private set; }
         public Func<object, IEnumerable<object>> GetUncommitedEventsMethod { get; private set; }
-        public Action<object,object> ApplyMethod { get; private set; } 
+        public Action<object,object> ApplyMethod { get; private set; }
+        public Action<object> StartReplay { get; private set; }
+        public Action<object> EndReplay { get; set; }
+        public Action<IEnumerable<object>> PublishEvents { get; private set; }
         public AmazonS3 AmazonClient
         {
             get { return _client ?? (_client = Amazon.AWSClientFactory.CreateAmazonS3Client(Key, Secret)); }
@@ -97,8 +104,36 @@ namespace WhaleES.Configuration
                                                                                   pi.ParameterType == @event.GetType())
                                                                                   );
                                                 if (applyMethod == null) return;
-                                                applyMethod.Invoke(ar, new[]{@event,true});
+                                                if (_hasReplaySwith)
+                                                    applyMethod.Invoke(ar, new[] { @event });
+                                                else
+                                                    applyMethod.Invoke(ar, new[] {@event});
+                                                    
+                                                
                                             });
+        }
+        public Configuration CallMethodToStartReplay(string methodName)
+        {
+            _hasReplaySwith = false;
+            StartReplay =
+                ar =>
+                ar.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).First(
+                    mi => mi.Name == methodName).Invoke(ar, null);
+            return this;
+        }
+        public Configuration CallMethodToEndReplay(string methodName)
+        {
+            _hasReplaySwith = true;
+            EndReplay =
+                ar =>
+                ar.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).First(
+                    mi => mi.Name == methodName).Invoke(ar, null);
+            return this;
+        }
+        public Configuration PublishEventsWith(Action<IEnumerable<object>> publisher )
+        {
+            PublishEvents = publisher;
+            return this;
         }
     }
 }

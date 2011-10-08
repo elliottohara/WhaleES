@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using WhaleES.Configuration;
 
 namespace WhaleES.Integration.Test
@@ -76,6 +78,36 @@ namespace WhaleES.Integration.Test
         public object[] EventsThatNeedToBeStored()
         {
             return TheUnCommittedEvents.ToArray();
+        }
+    }
+    public class ElliottsSuperDuperRecordingAR:AR
+    {
+        public static void Configure()
+        {
+            ConfigureWhaleEs.With()
+                .CallMethodToStartReplay("StartReplay")
+                .CallMethodToEndReplay("StopReplay");
+
+        }
+        private bool _isReplaying;
+        public static bool calledStart;
+        public static bool calledEnd;
+        private void StartReplay()
+        {
+            if(_isReplaying) throw new InvalidOperationException("called StartReplay when already replaying");
+            _isReplaying = true;
+            calledStart = true;
+        }
+        private void StopReplay()
+        {
+            if(!_isReplaying) throw new InvalidOperationException("Can't stop what you didn't start");
+            _isReplaying = false;
+            calledEnd = true;
+        }
+        internal IEnumerable<object> UncommittedEvents { get { return TheUnCommittedEvents; } }
+        private void Apply(StandardEvent @event)
+        {
+            AddEvent(@event);
         }
     }
 }

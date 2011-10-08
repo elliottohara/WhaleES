@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\ConfigureWhaleES.cs" />
+    <Compile Include="Denormalizers\Denormalizer.cs" />
     <Compile Include="EventEnvelope.cs" />
     <Compile Include="ISerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

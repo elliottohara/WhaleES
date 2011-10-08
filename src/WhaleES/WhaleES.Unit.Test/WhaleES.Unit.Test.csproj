@@ -49,17 +49,22 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationTestFor.cs" />
     <Compile Include="non_standard_setup_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="publishing_tests.cs" />
+    <Compile Include="Serialization\protobuf_serializer_tests.cs" />
     <Compile Include="TestAggrigateRoots.cs" />
     <Compile Include="TestEvents.cs" />
     <Compile Include="When_an_AggrigateRoot_has_internal_methods.cs" />
     <Compile Include="When_an_AggrigateRoot_has_non_standard_public_methods.cs" />
     <Compile Include="When_an_AggrigateRoot_has_private_methods.cs" />
     <Compile Include="when_an_AggrigateRoot_has_public_method.cs" />
+    <Compile Include="When_an_aggrigate_root_has_instance_methods_for_start_and_stop_replay.cs" />
+    <Compile Include="when_using_a_repository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

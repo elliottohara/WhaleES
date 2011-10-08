@@ -13,6 +13,7 @@ namespace WhaleES
         void Persist(string id, params object[] events);
         void Persist(string id,object @event);
         IEnumerable<object> GetEventStream(string id);
+        IEnumerable<object> GetEventStream();
     }
 
     public class StreamOfEventsFor<T> : IDisposable, IStreamOfEventsFor<T> where T:new()
@@ -33,10 +34,23 @@ namespace WhaleES
         {
             return _keyPrefix + id;
         }
-        private bool Exists(string id)
+        private IEnumerable<string> AllStreamIds()
         {
             var listObjectsRequest = new ListObjectsRequest().WithBucketName(_bucket).WithPrefix(_keyPrefix);
-            return _s3Client.ListObjects(listObjectsRequest).S3Objects.Any(s => s.Key == KeyFor(id));
+            return _s3Client.ListObjects(listObjectsRequest).S3Objects.Select(k => k.Key.Substring(_keyPrefix.Length));
+        }
+        private bool Exists(string id)
+        {
+            return AllStreamIds().Contains(id);
+        }
+        public IEnumerable<object> GetEventStream()
+        {
+            var allEvents = new List<object>();
+            foreach (var streamId in AllStreamIds())
+            {
+                allEvents.AddRange(GetEventStream(streamId));
+            }
+            return allEvents;
         }
         private List<EventEnvelope>  ExistingEventsFor(string id)
         {
