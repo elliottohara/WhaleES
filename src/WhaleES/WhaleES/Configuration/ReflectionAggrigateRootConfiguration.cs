@@ -49,13 +49,7 @@ namespace WhaleES.Configuration
 
             return UseActionToCallApply((@event, ar) =>
             {
-                var applyMethod = ar.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
-                    .FirstOrDefault(mi => mi.Name == "Apply" &&
-                                          mi.GetParameters()
-                                              .Any(
-                                                  pi =>
-                                                  pi.ParameterType == @event.GetType())
-                                                  );
+                var applyMethod = FindApplyMethod(@event, ar,methodName);
                 if (applyMethod == null) return;
                 if (_configuration.HasReplaySwith)
                     applyMethod.Invoke(ar, new[] { @event });
@@ -65,6 +59,25 @@ namespace WhaleES.Configuration
 
             });
         }
+
+        private static MethodInfo FindApplyMethod(object @event, object ar,string methodName)
+        {
+            var allApplyMethods = ar.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance |
+                                                          BindingFlags.Public).Where(mi => mi.Name == methodName).ToList();
+
+            var concreteApplyMethod = allApplyMethods.FirstOrDefault(mi => 
+                                      mi.GetParameters()
+                                          .Any(
+                                              pi =>
+                                              pi.ParameterType == @event.GetType()));
+            if (concreteApplyMethod != null) return concreteApplyMethod;
+            var abstractApplyMethod =
+                allApplyMethods.FirstOrDefault(
+                    mi => mi.GetParameters().Any(pi => pi.ParameterType.IsAssignableFrom(@event.GetType())));
+            return abstractApplyMethod;
+
+        }
+
         public Configuration CallMethodToStartReplay(string methodName)
         {
             _configuration.HasReplaySwith = false;

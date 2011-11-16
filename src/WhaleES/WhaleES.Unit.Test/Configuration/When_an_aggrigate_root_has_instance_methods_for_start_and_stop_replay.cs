@@ -26,5 +26,29 @@ namespace WhaleES.Integration.Test
             Assert.True(ElliottsSuperDuperRecordingAR.calledStart);
             Assert.True(ElliottsSuperDuperRecordingAR.calledEnd);
         }
+
+        [Test]
+        public void polymorphism_actually_works_for_an_abstract()
+        {
+            WhenStreamContains(new UnknownIdEvent());
+            Repository.Get(Id);
+
+            Assert.True(ElliottsSuperDuperRecordingAR.CalledAbstract);
+            Assert.False(ElliottsSuperDuperRecordingAR.CalledApplyForConcrete);
+        }
+        [Test]
+        public void concrete_type_methods_are_preferred()
+        {
+            WhenStreamContains(new SpecialEvent());
+            Repository.Get(Id);
+
+            Assert.False(ElliottsSuperDuperRecordingAR.CalledAbstract);
+            Assert.True(ElliottsSuperDuperRecordingAR.CalledApplyForConcrete);
+        }
+        
+        
+        public class UnknownIdEvent:IHaveAnId{
+            public string Id { get; set; }
+        }
     }
 }

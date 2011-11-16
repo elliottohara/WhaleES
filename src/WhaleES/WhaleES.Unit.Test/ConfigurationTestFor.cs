@@ -24,7 +24,7 @@ namespace WhaleES.Integration.Test
         }
         protected void WhenStreamContains(object @event)
         {
-            EventStream.Stub(es => es.GetEventStream(Id)).IgnoreArguments().Return(new List<object> { new StandardEvent() });
+            EventStream.Stub(es => es.GetEventStream(Id)).IgnoreArguments().Return(new List<object> { @event });
         }
         protected void WhenAggrigateRootAppliedEvent(object @event)
         {

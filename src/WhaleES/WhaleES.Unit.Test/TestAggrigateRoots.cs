@@ -88,11 +88,17 @@ namespace WhaleES.Integration.Test
                 .UseExampleAggrigateRoot<ElliottsSuperDuperRecordingAR>()
                 .StartReplayBy(ar => ar.StartReplay())
                 .StopReplayBy(ar => ar.StopReplay());
+            calledEnd = false;
+            calledStart = false;
+            CalledAbstract = false;
+            CalledApplyForConcrete = false;
 
         }
         private bool _isReplaying;
         public static bool calledStart;
         public static bool calledEnd;
+        public static bool CalledAbstract;
+        public static bool CalledApplyForConcrete;
         private void StartReplay()
         {
             if(_isReplaying) throw new InvalidOperationException("called StartReplay when already replaying");
@@ -111,5 +117,14 @@ namespace WhaleES.Integration.Test
         {
             AddEvent(@event);
         }
+        public void Apply(IHaveAnId abstractEvent)
+        {
+            CalledAbstract = true;
+        }
+        public void Apply(SpecialEvent specialEvent)
+        {
+            CalledApplyForConcrete = true;
+        }
+        
     }
 }
