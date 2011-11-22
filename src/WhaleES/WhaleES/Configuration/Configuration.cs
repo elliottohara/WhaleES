@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Web.Caching;
 using Amazon.S3;
+using WhaleES.Caching;
 
 namespace WhaleES.Configuration
 {
@@ -14,6 +16,13 @@ namespace WhaleES.Configuration
             StartReplay = a => { };
             EndReplay = a => { };
             PublishEvents = events => { };
+            Cache = new NullCache();
+        }
+
+        internal ICache Cache { get; set; }
+        public CachingConfiguration CacheWith()
+        {
+            return new CachingConfiguration(this);
         }
         private AmazonS3 _client;
         internal bool HasReplaySwith;

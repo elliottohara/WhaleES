@@ -16,7 +16,7 @@ namespace WhaleES
         {
             ConfigureWhaleEs.AssertConfigurationIsValid();
             var amazonClient = ConfigureWhaleEs.CurrentConfig.AmazonClient;
-            return new StreamOfEventsFor<TAggrigateRoot>(amazonClient, ConfigureWhaleEs.CurrentConfig.BucketName, ConfigureWhaleEs.CurrentConfig.Serializer);
+            return new CachingEventStream<TAggrigateRoot>(amazonClient, ConfigureWhaleEs.CurrentConfig.BucketName, ConfigureWhaleEs.CurrentConfig.Serializer,ConfigureWhaleEs.CurrentConfig.Cache);
         } 
     } 
     /// <summary>
