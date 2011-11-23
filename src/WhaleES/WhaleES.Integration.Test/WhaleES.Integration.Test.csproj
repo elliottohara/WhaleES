@@ -54,6 +54,8 @@
     <Compile Include="tests.cs" />
     <Compile Include="curious_about_performance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Translator_tests.cs" />
+    <Compile Include="using_the_simpledb_denormalizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

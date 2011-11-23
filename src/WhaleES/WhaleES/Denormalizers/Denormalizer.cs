@@ -11,7 +11,7 @@ namespace WhaleES.Denormalizers
         // ReSharper disable StaticFieldInGenericType
         private static readonly Dictionary<Type, MethodInfo> HandleMethods = new Dictionary<Type, MethodInfo>();
         // ReSharper restore StaticFieldInGenericType
-        public Denormalizer<TViewModel> Process(IEnumerable<object> eventStream)
+        public virtual Denormalizer<TViewModel> Process(IEnumerable<object> eventStream)
         {
             Results = new TViewModel();
             foreach (var @event in eventStream)

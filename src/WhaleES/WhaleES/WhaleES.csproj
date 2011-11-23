@@ -56,6 +56,9 @@
     <Compile Include="Configuration\ReflectionAggrigateRootConfiguration.cs" />
     <Compile Include="Configuration\SerilizationConfiguration.cs" />
     <Compile Include="Denormalizers\Denormalizer.cs" />
+    <Compile Include="Denormalizers\QueryTranslator.cs" />
+    <Compile Include="Denormalizers\SimpleDbDenormalizer.cs" />
+    <Compile Include="Denormalizers\SimpleDbRepository.cs" />
     <Compile Include="EventEnvelope.cs" />
     <Compile Include="ISerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

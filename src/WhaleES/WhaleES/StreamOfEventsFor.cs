@@ -72,7 +72,8 @@ namespace WhaleES
             {
                 var key = s3Object.Key;
                 key = key.Substring(_keyPrefix.Length);
-                key = key.Substring(0, key.IndexOf("/"));
+                var lastIndex = key.Contains("/") ? key.IndexOf("/") : key.Length;
+                key = key.Substring(0, lastIndex);
                 yield return key;
             }
         }

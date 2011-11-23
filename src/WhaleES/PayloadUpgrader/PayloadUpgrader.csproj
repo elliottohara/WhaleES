@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>8aa9a3c8-42a4-4822-b04d-0c75f778b276</ProjectGuid>
+    <ProjectGuid>{61376330-2316-46E1-83E0-1A255AEBBD02}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PayloadUpgrader</RootNamespace>
